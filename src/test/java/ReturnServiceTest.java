@@ -9,15 +9,21 @@ public class ReturnServiceTest {
     private ReturnService service = new ReturnService();
 
     @Test
-    void shouldReturnTrueWhen14Days() {
-
+    void shouldReturnTrueWhen13Days() {
         Order order = new Order();
-        order.soldAt = LocalDateTime.now().minusDays(14);
+        order.soldAt = LocalDateTime.now().minusDays(13);
+
+        assertTrue(service.canReturnProduct(order));
+    }
+
+    @Test
+    void shouldReturnTrueWhen14Days() {
+        Order order = new Order();
+        order.soldAt = LocalDateTime.now().minusDays(14).plusSeconds(1);
 
         boolean actualResult = service.canReturnProduct(order);
 
-        boolean expectedResult = true;
-        assertEquals(expectedResult, actualResult);
+        assertTrue(actualResult);
     }
 
     @Test
@@ -25,9 +31,6 @@ public class ReturnServiceTest {
         Order order = new Order();
         order.soldAt = LocalDateTime.now().minusDays(15);
 
-        boolean actualResult = service.canReturnProduct(order);
-
-        boolean expectedResult = false;
-        assertEquals(expectedResult, actualResult);
+        assertFalse(service.canReturnProduct(order));
     }
 }

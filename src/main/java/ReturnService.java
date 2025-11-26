@@ -1,5 +1,4 @@
-import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
+import java.time.LocalDateTime;
 
 public class ReturnService {
     public boolean canReturnProduct(Order order) {
@@ -7,11 +6,8 @@ public class ReturnService {
             return false;
         }
 
-        LocalDate soldDate = order.soldAt.toLocalDate();
-        LocalDate currentDate = LocalDate.now();
+        LocalDateTime returnDeadline = order.soldAt.plusDays(Constants.DAYS_TO_RETURN);
+        return !LocalDateTime.now().isAfter(returnDeadline);
 
-        long daysBetween = ChronoUnit.DAYS.between(soldDate, currentDate);
-
-        return daysBetween <= Constants.DAYS_TO_RETURN;
     }
 }
